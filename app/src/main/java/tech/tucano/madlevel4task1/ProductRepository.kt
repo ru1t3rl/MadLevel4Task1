@@ -11,11 +11,11 @@ class ProductRepository(context: Context) {
     }
 
     suspend fun getAllProducts(): List<Product> {
-        return productDao.getAllProduts()
+        return productDao.getAllProducts()
     }
 
     suspend fun insertProduct(product: Product){
-        productDao.instertProduct(product)
+        productDao.insertProduct(product)
     }
 
     suspend fun deleteProduct(product: Product) {

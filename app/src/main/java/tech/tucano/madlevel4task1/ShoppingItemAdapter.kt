@@ -12,7 +12,8 @@ class ShoppingItemAdapter (private val shoppingItems: List<Product>) :
             private val binding = ItemProductBinding.bind(itemView)
 
             fun databind(shoppingItem: Product){
-
+                binding.tvName.text = shoppingItem.name
+                binding.tvAmount.text = shoppingItem.quantity.toString()
             }
         }
 

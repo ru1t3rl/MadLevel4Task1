@@ -102,7 +102,7 @@ class ShoppingListFragment : Fragment() {
             mainScope.launch {
                 val product = Product (
                     name = txtProductName.text.toString(),
-                    quantity = txtAmount.text.toString().toInt()
+                    quantity = txtAmount.text.toString().toShort()
                 )
 
                 withContext(Dispatchers.IO){

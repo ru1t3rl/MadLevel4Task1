@@ -1,10 +1,19 @@
 package tech.tucano.madlevel4task1
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Parcelize
-data class Product (
+@Entity(tableName = "product_table")
+data class Product(
+
+    @ColumnInfo(name = "name")
     var name: String,
-    var quantity: Int
-): Parcelable
+
+    @ColumnInfo(name = "quantity")
+    var quantity: Short,
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Long? = null
+)
