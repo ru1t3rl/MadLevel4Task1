@@ -1,17 +1,13 @@
 package tech.tucano.madlevel4task1
 
 import android.app.AlertDialog
-import android.content.DialogInterface
-import android.os.Binder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,8 +45,12 @@ class ShoppingListFragment : Fragment() {
 
         initRv()
 
-        fabAdd.setOnClickListener{
+        fab_add_product.setOnClickListener{
             showAddProductDialog()
+        }
+
+        fab_remove_all_products.setOnClickListener{
+            removeAllProducts()
         }
     }
 
@@ -145,5 +145,15 @@ class ShoppingListFragment : Fragment() {
         }
 
         return ItemTouchHelper(callback)
+    }
+
+    private fun removeAllProducts(){
+        mainScope.launch {
+            withContext(Dispatchers.IO){
+                productRepository.deleteAllProducts()
+            }
+
+            getShoppingListFromDatabase()
+        }
     }
 }
