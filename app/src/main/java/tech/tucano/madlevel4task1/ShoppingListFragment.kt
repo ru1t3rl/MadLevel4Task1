@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_shopping_list.*
@@ -62,6 +63,8 @@ class ShoppingListFragment : Fragment() {
                 DividerItemDecoration.
                 VERTICAL
             ))
+
+        createItemTouchHelper().attachToRecyclerView(rvProducts)
     }
 
     private suspend fun getShoppingListFromDatabase() {
@@ -116,5 +119,31 @@ class ShoppingListFragment : Fragment() {
     private fun validateFields(txtProductName: EditText, txtAmount: EditText): Boolean{
         return txtProductName.text.toString().isNotBlank() &&
                 txtAmount.text.toString().isNotBlank()
+    }
+
+    private fun createItemTouchHelper(): ItemTouchHelper{
+        val callback = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val productToDelete = products[position]
+
+                mainScope.launch {
+                    withContext(Dispatchers.IO) {
+                        productRepository.deleteProduct(productToDelete)
+                        getShoppingListFromDatabase()
+                    }
+                }
+            }
+        }
+
+        return ItemTouchHelper(callback)
     }
 }
